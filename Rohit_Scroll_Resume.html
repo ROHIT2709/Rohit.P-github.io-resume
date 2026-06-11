@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rohit P — Senior Software Engineer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800;900&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0C1726; --bg2:#0F1E33; --panel:#13233B; --line:#23405F;
+    --ink:#E8EEF6; --ink-soft:#9DB2CB;
+    --green:#3DCB8A; --green-dim:#1E7F4F;
+    --amber:#F2B33D;
+    --mono:'JetBrains Mono',monospace; --display:'Archivo',sans-serif; --body:'Inter',sans-serif;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.6;overflow-x:hidden}
+
+  /* scroll progress bar */
+  #progress{position:fixed;top:0;left:0;height:3px;width:0;background:linear-gradient(90deg,var(--green),var(--amber));z-index:100}
+
+  /* floating background glyphs (parallax) */
+  .glyphs{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden}
+  .glyph{position:absolute;font-family:var(--mono);color:var(--line);opacity:.5;user-select:none;white-space:nowrap}
+
+  /* pipeline spine */
+  #spine{position:absolute;left:50%;top:0;transform:translateX(-50%);width:4px;height:100%;z-index:1}
+  #spine .track{position:absolute;inset:0;background:var(--line);border-radius:2px}
+  #spine .fill{position:absolute;top:0;left:0;width:100%;height:0;background:linear-gradient(180deg,var(--green),var(--amber));border-radius:2px}
+  #doc{position:absolute;left:50%;transform:translate(-50%,-50%);width:34px;height:42px;background:var(--ink);border-radius:4px;z-index:3;box-shadow:0 0 24px rgba(61,203,138,.6);display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:9px;color:var(--bg);font-weight:600}
+  #doc::before{content:"";position:absolute;top:0;right:0;border:7px solid transparent;border-top-color:var(--bg);border-right-color:var(--bg)}
+
+  main{position:relative;z-index:2;max-width:1000px;margin:0 auto;padding:0 22px}
+
+  /* hero */
+  .hero{min-height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;position:relative}
+  .hero .status{font-family:var(--mono);font-size:12px;letter-spacing:2px;color:var(--green);border:1px solid var(--green-dim);padding:6px 16px;border-radius:999px;margin-bottom:22px;animation:pulse 2.4s infinite}
+  @keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(61,203,138,.35)}55%{box-shadow:0 0 0 12px rgba(61,203,138,0)}}
+  .hero h1{font-family:var(--display);font-weight:900;font-size:clamp(44px,9vw,96px);letter-spacing:-2px;line-height:1.02}
+  .hero h1 span{color:var(--green)}
+  .hero .sub{font-family:var(--mono);font-size:clamp(12px,2vw,15px);color:var(--ink-soft);margin-top:16px;letter-spacing:1px}
+  .hero .contacts{display:flex;gap:20px;flex-wrap:wrap;justify-content:center;margin-top:26px;font-size:14px}
+  .hero .contacts a{color:var(--ink-soft);text-decoration:none;border-bottom:1px dotted var(--line)}
+  .hero .contacts a:hover{color:var(--green)}
+  .scrollcue{position:absolute;bottom:34px;font-family:var(--mono);font-size:11px;letter-spacing:2px;color:var(--ink-soft);animation:bob 1.8s infinite}
+  @keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(8px)}}
+
+  /* stage marker */
+  .stage{display:flex;justify-content:center;padding:90px 0 50px;position:relative}
+  .stage span{font-family:var(--mono);font-size:13px;font-weight:600;letter-spacing:3px;color:var(--bg);background:var(--green);padding:10px 26px;border-radius:8px;box-shadow:0 0 30px rgba(61,203,138,.35)}
+  .stage.amber span{background:var(--amber);box-shadow:0 0 30px rgba(242,179,61,.35)}
+
+  /* reveal cards */
+  .reveal{opacity:0;transform:translateY(46px);transition:opacity .7s ease,transform .7s ease}
+  .reveal.in{opacity:1;transform:none}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:30px;margin:26px 0}
+  .card.left{margin-right:14%}
+  .card.right{margin-left:14%}
+  .card h3{font-family:var(--display);font-weight:800;font-size:22px;letter-spacing:-.3px}
+  .card .meta{font-family:var(--mono);font-size:12px;color:var(--green);margin:6px 0 4px}
+  .card .stack{font-family:var(--mono);font-size:11.5px;color:var(--ink-soft);margin-bottom:14px}
+  .card ul{list-style:none}
+  .card li{padding:7px 0 7px 22px;position:relative;color:var(--ink-soft);font-size:14.5px}
+  .card li::before{content:"▸";position:absolute;left:2px;color:var(--green);top:8px;font-size:12px}
+  .card li b{color:var(--ink);font-weight:600}
+
+  /* metrics */
+  .metrics{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:16px;margin:30px 0}
+  .metric{background:var(--bg2);border:1px solid var(--line);border-radius:14px;padding:26px 20px;text-align:center}
+  .metric b{font-family:var(--display);font-weight:900;font-size:42px;color:var(--green);display:block;line-height:1}
+  .metric small{font-family:var(--mono);font-size:11px;color:var(--ink-soft);letter-spacing:.5px;display:block;margin-top:10px}
+
+  /* skills */
+  .skillwrap{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px;justify-content:center}
+  .skill{font-family:var(--mono);font-size:13px;padding:9px 18px;border-radius:999px;border:1px solid var(--line);color:var(--ink-soft);background:var(--bg2);transition:.5s;opacity:0;transform:scale(.7)}
+  .skill.in{opacity:1;transform:scale(1)}
+  .skill:hover{border-color:var(--green);color:var(--green)}
+
+  .sectiontitle{font-family:var(--display);font-weight:800;font-size:clamp(26px,4.5vw,38px);text-align:center;letter-spacing:-.5px}
+  .sectionsub{font-family:var(--mono);font-size:12.5px;color:var(--ink-soft);text-align:center;margin-top:8px}
+
+  /* education + footer */
+  .edu{display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap;padding:16px 0;border-bottom:1px dashed var(--line)}
+  .edu:last-child{border-bottom:none}
+  .edu b{font-weight:600}
+  .edu span{font-family:var(--mono);font-size:12px;color:var(--green)}
+  footer{text-align:center;padding:70px 0 50px;font-family:var(--mono);font-size:12px;color:var(--ink-soft)}
+  footer .exit{color:var(--green);font-weight:600;letter-spacing:1px;margin-bottom:8px;display:block}
+
+  @media(max-width:760px){
+    #spine{left:18px;transform:none}
+    #doc{left:18px}
+    .card.left,.card.right{margin:22px 0 22px 34px}
+    .stage{justify-content:flex-start;padding-left:46px}
+  }
+  @media (prefers-reduced-motion: reduce){
+    *,*::before,*::after{animation:none!important;transition:none!important}
+    .reveal,.skill{opacity:1!important;transform:none!important}
+    #doc{display:none}
+  }
+</style>
+</head>
+<body>
+<div id="progress"></div>
+<div class="glyphs" id="glyphs"></div>
+
+<div id="spine"><div class="track"></div><div class="fill" id="spinefill"></div></div>
+<div id="doc">DOC</div>
+
+<main>
+
+  <section class="hero">
+    <div class="status">● PIPELINE RUNNING — 6+ YEARS UPTIME</div>
+    <h1>ROHIT <span>P</span></h1>
+    <p class="sub">SENIOR SOFTWARE ENGINEER · JAVA / SPRING / KAFKA / AWS<br>DOCUMENT PIPELINES @ 100K+ DOCS / DAY</p>
+    <div class="contacts">
+      <a href="mailto:rohit14517@gmail.com">rohit14517@gmail.com</a>
+      <a href="https://linkedin.com/in/rohit-p-1b971917a" target="_blank" rel="noopener">LinkedIn</a>
+      <span style="color:var(--ink-soft)">(628) 265-2367</span>
+    </div>
+    <div class="scrollcue">▼ SCROLL TO PROCESS DOCUMENT ▼</div>
+  </section>
+
+  <div class="stage reveal"><span>STAGE 1 / RECEIVE — THE NUMBERS</span></div>
+  <div class="metrics reveal">
+    <div class="metric"><b class="count" data-target="100" data-suffix="K+">0</b><small>DOCUMENTS / DAY</small></div>
+    <div class="metric"><b class="count" data-target="99.9" data-suffix="%" data-decimal="1">0</b><small>PROCESSING RELIABILITY</small></div>
+    <div class="metric"><b class="count" data-target="70" data-suffix="%">0</b><small>FASTER RETRIEVAL</small></div>
+    <div class="metric"><b class="count" data-target="60" data-suffix="%">0</b><small>MANUAL EFFORT CUT</small></div>
+  </div>
+
+  <div class="stage amber reveal"><span>STAGE 2 / VALIDATE — SKILLS</span></div>
+  <div class="reveal">
+    <h2 class="sectiontitle">The Toolkit</h2>
+    <p class="sectionsub">// languages · frameworks · platform</p>
+    <div class="skillwrap" id="skills">
+      <span class="skill">Java 8/11/17</span><span class="skill">Spring Boot</span><span class="skill">Spring Batch</span>
+      <span class="skill">Spring Cloud</span><span class="skill">Spring Security · JWT</span><span class="skill">Spring Data JPA</span>
+      <span class="skill">Hibernate</span><span class="skill">Apache Kafka</span><span class="skill">AWS S3 · EC2 · Lambda</span>
+      <span class="skill">REST APIs</span><span class="skill">Jenkins · SonarQube</span><span class="skill">PostgreSQL</span>
+      <span class="skill">Oracle</span><span class="skill">MySQL</span><span class="skill">Splunk</span>
+      <span class="skill">JUnit 5 · Mockito</span><span class="skill">Maven · Gradle</span><span class="skill">Microservices</span>
+    </div>
+  </div>
+
+  <div class="stage reveal"><span>STAGE 3 / COMPOSE — EXPERIENCE</span></div>
+
+  <div class="card left reveal">
+    <h3>Broadridge Financial Solutions — Senior Software Engineer</h3>
+    <div class="meta">JUN 2024 – PRESENT · CLIENT: LENDMARK FINANCIAL SERVICES</div>
+    <div class="stack">Java 17 · Spring Boot 3.x · Spring Batch · Spring Cloud · AWS · Kafka · PostgreSQL</div>
+    <ul>
+      <li>Built <b>end-to-end file preprocessing pipeline</b>: decryption → decompression → validation → AFP generation across 10 letter types — <b>manual onboarding effort down 60%</b>.</li>
+      <li>Designed configurable <b>NCOA address validation</b> with CASS certification and dynamic rules per input file.</li>
+      <li>Implemented <b>multi-channel delivery</b> to 5+ endpoints: print, digital presentment, interactive print workflows.</li>
+      <li>Engineered <b>Kafka workflows with dead-letter queues</b> — <b>99.9% file processing reliability</b>.</li>
+      <li>Designed <b>S3 archival architecture</b> (versioning, lifecycle, pre-signed URLs) — <b>retrieval 70% faster</b>.</li>
+      <li>Event-driven <b>file alerts & late-file detection</b> — client response time from hours to minutes.</li>
+      <li><b>Jenkins multi-stage CI/CD</b> with SonarQube gates across Dev / QA / Prod; Splunk health dashboards across 12 accounts.</li>
+    </ul>
+  </div>
+
+  <div class="card right reveal">
+    <h3>Broadridge — Client: TD Bank</h3>
+    <div class="meta">JUN 2023 – MAY 2024</div>
+    <div class="stack">Java 11 · Spring Boot 2.x · Spring Batch · JPA · AWS S3 · PostgreSQL · Kafka · Splunk</div>
+    <ul>
+      <li>Engineered <b>high-volume batch statement workflows</b> on PostgreSQL with Spring Batch.</li>
+      <li>Built and tuned <b>Spring Data JPA repositories</b> for document metadata access.</li>
+      <li>Maintained <b>Kafka file-event flows</b> with Splunk-backed monitoring; S3 storage + Jenkins automation.</li>
+    </ul>
+  </div>
+
+  <div class="card left reveal">
+    <h3>Broadridge — Client: Morgan Stanley</h3>
+    <div class="meta">JUN 2022 – MAY 2023</div>
+    <div class="stack">Java 8 · Spring Boot · Spring Batch · Spring MVC · Oracle · Maven · Jenkins</div>
+    <ul>
+      <li><b>Nightly trade file processing</b> rebuilt with Spring Batch — runtime <b>from 4 hours to 25 minutes</b>.</li>
+      <li><b>REST APIs</b> for trade ingestion, file transfer, and status tracking — <b>200+ internal users</b>.</li>
+      <li>Custom <b>validation framework</b> (format, checksum, duplicates) — <b>error rates down 35%</b>.</li>
+      <li>Optimized <b>Oracle stored procedures & SQL</b> — report generation <b>50% faster</b>.</li>
+    </ul>
+  </div>
+
+  <div class="card right reveal">
+    <h3>Synchronoss Technologies — Software Development Engineer</h3>
+    <div class="meta">2020 – 2022 · HYDERABAD</div>
+    <div class="stack">Java 8 · Spring Boot · Spring MVC · JPA · Hibernate · MySQL · REST · JUnit</div>
+    <ul>
+      <li>Designed the <b>Profit Enhancement Center ETL pipeline</b> loading AT&T / Verizon invoice data into MySQL for auditing and forecasting.</li>
+      <li><b>JPA + Hibernate repositories</b> optimized with custom JPQL, pagination, entity caching.</li>
+      <li><b>Secure REST APIs with Spring Security & JWT</b> — serving 150+ internal and external consumers.</li>
+    </ul>
+  </div>
+
+  <div class="stage amber reveal"><span>STAGE 4 / DELIVER — EDUCATION</span></div>
+  <div class="card reveal" style="margin-bottom:0">
+    <div class="edu">
+      <div><b>B.Tech, Computer Science & Engineering</b><br><span style="color:var(--ink-soft);font-size:13px">CMR College of Engineering and Technology (JNTU-H)</span></div>
+      <span>2018</span>
+    </div>
+    <div class="edu">
+      <div><b>Java Full Stack Developer Certificate</b></div>
+      <span>CERTIFIED</span>
+    </div>
+  </div>
+
+  <footer class="reveal">
+    <span class="exit">JOB STATUS: COMPLETED · EXIT CODE 0</span>
+    rohit14517@gmail.com · linkedin.com/in/rohit-p-1b971917a
+  </footer>
+</main>
+
+<script>
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* ---- floating glyphs ---- */
+  const glyphTexts = ['{ }','▸','AFP','kafka://docs.in','S3://archive','batch.step()','ack=all','chunk(500)','</>','reconcile.dat','#!/deliver','0x4A41','JOB_EXECUTION','▣▣▣','commit -m "ship"'];
+  const layer = document.getElementById('glyphs');
+  const glyphs = [];
+  for(let i=0;i<22;i++){
+    const g=document.createElement('span');
+    g.className='glyph';
+    g.textContent=glyphTexts[i%glyphTexts.length];
+    g.style.left=(Math.random()*94)+'%';
+    g.style.top=(Math.random()*100)+'%';
+    g.style.fontSize=(11+Math.random()*16)+'px';
+    g.dataset.speed=(0.04+Math.random()*0.18).toFixed(3);
+    layer.appendChild(g); glyphs.push(g);
+  }
+
+  /* ---- scroll-driven: progress bar, spine fill, doc node, parallax ---- */
+  const fill=document.getElementById('spinefill');
+  const doc=document.getElementById('doc');
+  const bar=document.getElementById('progress');
+  let ticking=false;
+  function onScroll(){
+    if(ticking) return; ticking=true;
+    requestAnimationFrame(()=>{
+      const max=document.documentElement.scrollHeight-window.innerHeight;
+      const p=max>0?window.scrollY/max:0;
+      bar.style.width=(p*100)+'%';
+      const spineH=document.getElementById('spine').offsetHeight;
+      fill.style.height=(p*spineH)+'px';
+      if(!reduceMotion){
+        doc.style.top=(p*spineH)+'px';
+        glyphs.forEach(g=>{ g.style.transform='translateY('+(-window.scrollY*g.dataset.speed)+'px)'; });
+      }
+      ticking=false;
+    });
+  }
+  window.addEventListener('scroll',onScroll,{passive:true});
+  onScroll();
+
+  /* ---- reveal on enter ---- */
+  const io=new IntersectionObserver(entries=>{
+    entries.forEach(e=>{
+      if(e.isIntersecting){
+        e.target.classList.add('in');
+        if(e.target.classList.contains('metrics')) runCounters(e.target);
+        if(e.target.querySelector && e.target.querySelector('.skill')) staggerSkills(e.target);
+        io.unobserve(e.target);
+      }
+    });
+  },{threshold:0.18});
+  document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+
+  /* ---- animated counters ---- */
+  function runCounters(scope){
+    scope.querySelectorAll('.count').forEach(el=>{
+      const target=parseFloat(el.dataset.target), suffix=el.dataset.suffix||'', dec=parseInt(el.dataset.decimal||'0');
+      if(reduceMotion){ el.textContent=target.toFixed(dec)+suffix; return; }
+      const dur=1400, t0=performance.now();
+      function tick(t){
+        const k=Math.min((t-t0)/dur,1), eased=1-Math.pow(1-k,3);
+        el.textContent=(target*eased).toFixed(dec)+suffix;
+        if(k<1) requestAnimationFrame(tick);
+      }
+      requestAnimationFrame(tick);
+    });
+  }
+
+  /* ---- staggered skill chips ---- */
+  function staggerSkills(scope){
+    scope.querySelectorAll('.skill').forEach((s,i)=>{
+      setTimeout(()=>s.classList.add('in'), reduceMotion?0:i*55);
+    });
+  }
+</script>
+</body>
+</html>
